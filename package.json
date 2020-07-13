@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
-    "dev": "nodemon ./appjs",
+    "dev": "SET NODE_ENV=debug && nodemon ./appjs",
     "lint": "./node_modules/.bin/eslint --fix"
   },
   "repository": {

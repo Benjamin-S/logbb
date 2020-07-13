@@ -8,6 +8,7 @@ const cors = require('cors');
 const passport = require('passport');
 const errorhandler = require('errorhandler');
 const mongoose = require('mongoose');
+const config = require('./config');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -33,9 +34,17 @@ if (!isProduction) {
 }
 
 if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI, {
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
 } else {
-  mongoose.connect('mongodb://localhost/logbb');
+  mongoose.connect('mongodb://localhost/logbb', {
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
   mongoose.set('debug', true);
 }
 
