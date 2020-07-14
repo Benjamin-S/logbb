@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-const router = require('express').Router();
-const passport = require('passport');
+const mongoose = require("mongoose");
+const router = require("express").Router();
+const passport = require("passport");
 
-const User = mongoose.model('User');
-const auth = require('../auth');
+const User = mongoose.model("User");
+const auth = require("../auth");
 
-router.get('/user', auth.required, (req, res, next) => {
+router.get("/user", auth.required, (req, res, next) => {
   User.findById(req.payload.id)
     .then((user) => {
       if (!user) {
@@ -17,7 +17,7 @@ router.get('/user', auth.required, (req, res, next) => {
     .catch(next);
 });
 
-router.put('/user', auth.required, (req, res, next) => {
+router.put("/user", auth.required, (req, res, next) => {
   User.findById(req.payload.id)
     .then((user) => {
       if (!user) {
@@ -25,19 +25,19 @@ router.put('/user', auth.required, (req, res, next) => {
       }
 
       // only update fields that were actually passed...
-      if (typeof req.body.user.username !== 'undefined') {
+      if (typeof req.body.user.username !== "undefined") {
         user.username = req.body.user.username;
       }
-      if (typeof req.body.user.email !== 'undefined') {
+      if (typeof req.body.user.email !== "undefined") {
         user.email = req.body.user.email;
       }
-      if (typeof req.body.user.name !== 'undefined') {
+      if (typeof req.body.user.name !== "undefined") {
         user.name = req.body.user.name;
       }
-      if (typeof req.body.user.surname !== 'undefined') {
+      if (typeof req.body.user.surname !== "undefined") {
         user.surname = req.body.user.surname;
       }
-      if (typeof req.body.user.password !== 'undefined') {
+      if (typeof req.body.user.password !== "undefined") {
         user.setPassword(req.body.user.password);
       }
 
@@ -46,7 +46,7 @@ router.put('/user', auth.required, (req, res, next) => {
     .catch(next);
 });
 
-router.post('/users/login', (req, res, next) => {
+router.post("/users/login", (req, res, next) => {
   if (!req.body.user.email) {
     return res.status(422).json({ errors: { email: "can't be blank" } });
   }
@@ -55,7 +55,7 @@ router.post('/users/login', (req, res, next) => {
     return res.status(422).json({ errors: { password: "can't be blank" } });
   }
 
-  passport.authenticate('local', { session: false }, (err, user, info) => {
+  passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err) {
       return next(err);
     }
@@ -68,7 +68,7 @@ router.post('/users/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/users', (req, res, next) => {
+router.post("/users", (req, res, next) => {
   const user = new User();
 
   user.username = req.body.user.username;

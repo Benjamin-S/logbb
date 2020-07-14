@@ -1,32 +1,34 @@
-const http = require('http');
-const path = require('path');
-const methods = require('methods');
-const express = require('express');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const cors = require('cors');
-const passport = require('passport');
-const errorhandler = require('errorhandler');
-const mongoose = require('mongoose');
-const config = require('./config');
+const http = require("http");
+const path = require("path");
+const methods = require("methods");
+const express = require("express");
+const bodyParser = require("body-parser");
+const session = require("express-session");
+const cors = require("cors");
+const passport = require("passport");
+const errorhandler = require("errorhandler");
+const mongoose = require("mongoose");
+const config = require("./config");
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
 // Create global app object
-var app = express();
+const app = express();
 
 app.use(cors());
 
 // Normal express config defaults
-app.use(require('morgan')('dev'));
+app.use(require("morgan")("dev"));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(require('method-override')());
-app.use(express.static(__dirname + '/public'));
+app.use(require("method-override")());
+
+app.use(express.static(`${__dirname}/public`));
 
 app.use(
-  session({ secret: 'logbb', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false })
+  session({ secret: "logbb", cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false })
 );
 
 if (!isProduction) {
@@ -40,22 +42,24 @@ if (isProduction) {
     useNewUrlParser: true,
   });
 } else {
-  mongoose.connect('mongodb://localhost/logbb', {
+  mongoose.connect("mongodb://localhost/logbb", {
     useCreateIndex: true,
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
-  mongoose.set('debug', true);
+  mongoose.set("debug", true);
 }
 
-require('./models/User');
-require('./config/passport');
+// Require all Models here
+require("./models/User");
+require("./models/Family");
+require("./config/passport");
 
-app.use(require('./routes'));
+app.use(require("./routes"));
 
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -93,5 +97,5 @@ app.use(function (err, req, res, next) {
 
 // finally, let's start our server...
 var server = app.listen(process.env.PORT || 3000, function () {
-  console.log('Listening on port ' + server.address().port);
+  console.log(`Listening on port ${server.address().port}`);
 });
