@@ -3,6 +3,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
+const Family = mongoose.model("Family");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -24,6 +25,7 @@ const UserSchema = new mongoose.Schema(
     },
     name: String,
     surname: String,
+    referrer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     family: { type: mongoose.Schema.Types.ObjectId, ref: "Family", default: null },
     hash: String,
     salt: String,
@@ -65,6 +67,7 @@ UserSchema.methods.toAuthJSON = function () {
     token: this.generateJWT(),
     name: this.name,
     surname: this.surname,
+    family: this.family,
   };
 };
 
@@ -75,5 +78,11 @@ UserSchema.methods.toProfileJSONFor = function (user) {
     surname: this.surname,
   };
 };
+
+// UserSchema.post("save", function(doc, next){
+//   if(doc.family === undefined) {
+//     var family = new Family({name: doc.surname})
+//   }
+// });
 
 mongoose.model("User", UserSchema);

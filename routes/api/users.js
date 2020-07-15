@@ -3,6 +3,7 @@ const router = require("express").Router();
 const passport = require("passport");
 
 const User = mongoose.model("User");
+const Family = mongoose.model("Family");
 const auth = require("../auth");
 
 router.get("/user", auth.required, (req, res, next) => {
@@ -74,6 +75,10 @@ router.post("/users", (req, res, next) => {
   user.username = req.body.user.username;
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
+
+  if (req.query.family !== undefined) {
+    user.family = req.query.family;
+  }
 
   user
     .save()

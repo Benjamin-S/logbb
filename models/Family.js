@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const FamilySchema = new mongoose.Schema(
   {
     name: String,
-    children: [{ type: mongoose.Schema.Types.ObjectId, ref: "Child" }],
+    babies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Baby" }],
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
