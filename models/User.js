@@ -3,6 +3,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
+
 const Family = mongoose.model("Family");
 
 const UserSchema = new mongoose.Schema(
@@ -25,8 +26,7 @@ const UserSchema = new mongoose.Schema(
     },
     name: String,
     surname: String,
-    referrer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    family: { type: mongoose.Schema.Types.ObjectId, ref: "Family", default: null },
+    family: { type: mongoose.Schema.Types.ObjectId, ref: "Family" },
     hash: String,
     salt: String,
   },
@@ -60,6 +60,7 @@ UserSchema.methods.generateJWT = function () {
   );
 };
 
+// Requires population of family
 UserSchema.methods.toAuthJSON = function () {
   return {
     username: this.username,
@@ -79,10 +80,17 @@ UserSchema.methods.toProfileJSONFor = function (user) {
   };
 };
 
-// UserSchema.post("save", function(doc, next){
-//   if(doc.family === undefined) {
-//     var family = new Family({name: doc.surname})
-//   }
-// });
+UserSchema.pre("save", async function (next) {
+  if (this.family === undefined || this.family === null) {
+    var fam_id = await new Family({ name: `${this.username}'s Family` })
+      .save()
+      .then((document) => {
+        return document._id;
+      })
+      .catch(next);
+    this.set({ family: fam_id });
+  }
+  next();
+});
 
 mongoose.model("User", UserSchema);

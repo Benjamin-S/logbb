@@ -51,8 +51,9 @@ if (isProduction) {
 }
 
 // Require all Models here
-require("./models/User");
 require("./models/Family");
+require("./models/User");
+require("./models/Baby");
 require("./config/passport");
 
 app.use(require("./routes"));

@@ -2,6 +2,8 @@ const router = require("express").Router();
 
 // Require all the api routes here so that the router object has all end-points
 router.use("/", require("./users"));
+router.use("/babies", require("./babies"));
+router.use("/", require("./families"));
 
 router.use(function (err, req, res, next) {
   if (err.name === "ValidationError") {
