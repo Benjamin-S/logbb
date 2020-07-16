@@ -12,7 +12,7 @@ const BabySchema = new mongoose.Schema(
 );
 
 BabySchema.virtual("age").get(function () {
-  return formatDistanceToNowStrict(this.birthdate);
+  return formatDistanceToNowStrict(this.birthDate);
 });
 
 BabySchema.methods.toAuthJSON = function () {
