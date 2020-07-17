@@ -7,6 +7,7 @@ const BabySchema = new mongoose.Schema(
     gender: String,
     birthDate: Date,
     dueDate: Date,
+    family: { type: mongoose.Types.ObjectId, ref: "Family" },
   },
   { timestamps: true }
 );

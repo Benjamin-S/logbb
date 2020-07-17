@@ -76,6 +76,7 @@ router.post("/users", (req, res, next) => {
   user.username = req.body.user.username;
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
+  user.family = req.body.user.family || null;
 
   user
     .save()

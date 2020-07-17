@@ -54,6 +54,7 @@ UserSchema.methods.generateJWT = function () {
     {
       id: this._id,
       username: this.username,
+      family: this.family,
       exp: parseInt(exp.getTime() / 1000),
     },
     secret
@@ -81,6 +82,7 @@ UserSchema.methods.toProfileJSONFor = function (user) {
 };
 
 UserSchema.pre("save", async function (next) {
+  console.log("Family Passed in: " + this.family);
   if (this.family === undefined || this.family === null) {
     var fam_id = await new Family({ name: `${this.username}'s Family` })
       .save()
